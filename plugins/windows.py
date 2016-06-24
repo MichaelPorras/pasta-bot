@@ -26,10 +26,10 @@ MRSKELTAL = ['▒▒▒░░░░░░░░░░▄▐░░░░',
              '░░░░░░░█░░░░░░░░█░░',
              '░░░░░░▐▌░░░░░░░░░█░']
 
-DANCE = ['░░┌──┐░░░░░░░░░░┌──┐░░'
-         '░╔╡▐▐╞╝░░┌──┐░░╔╡▐▐╞╝░'
-         '░░└╥╥┘░░╚╡▌▌╞╗░░└╥╥┘░░'
-         '░░░╚╚░░░░└╥╥┘░░░░╚╚░░░'
+DANCE = ['░░┌──┐░░░░░░░░░░┌──┐░░',
+         '░╔╡▐▐╞╝░░┌──┐░░╔╡▐▐╞╝░',
+         '░░└╥╥┘░░╚╡▌▌╞╗░░└╥╥┘░░',
+         '░░░╚╚░░░░└╥╥┘░░░░╚╚░░░',
          '░░░░░░░░░░╝╝░░░ DANCE PARTY']
 
 SPOOKY_RE = (r"\bgentle spooks\b", re.I)
@@ -125,9 +125,9 @@ def gentle_doot(match, conn=None, chan=None):
 
 
 @hook.command('circle')
-def launch_circle_dance(conn=None, chan=None):
-    dance_vid = 'https://www.youtube.com/v/nUqrafe46B8&autoplay=1&'
-                'loop=1&controls=0&showinfo=0&playlist=nUqrafe46B8'
+def launch_circle_dance(inp, conn=None, chan=None):
+    dance_vid = "'https://www.youtube.com/v/nUqrafe46B8&autoplay=1&"\
+                "loop=1&controls=0&showinfo=0&playlist=nUqrafe46B8'"
     os.popen('DISPLAY=:0 %s -new-window %s &' % (CHROME_CMD, dance_vid))
     ascii_spam(conn, chan, DANCE)
 
