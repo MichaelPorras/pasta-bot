@@ -4,13 +4,9 @@ import http
 import urlnorm
 import json
 import urllib
-import yql
 
 short_url = "http://is.gd/create.php"
 paste_url = "http://hastebin.com"
-yql_env = "http://datatables.org/alltables.env"
-
-YQL = yql.Public()
 
 
 class ShortenError(Exception):
@@ -47,8 +43,3 @@ def haste(text, ext='txt'):
     page = http.get(paste_url + "/documents", post_data=text)
     data = json.loads(page)
     return ("%s/raw/%s.%s" % (paste_url, data['key'], ext))
-
-
-def query(query, params={}):
-    """ runs a YQL query and returns the results """
-    return YQL.execute(query, params, env=yql_env)
