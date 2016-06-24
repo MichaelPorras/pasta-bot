@@ -26,6 +26,12 @@ MRSKELTAL = ['▒▒▒░░░░░░░░░░▄▐░░░░',
              '░░░░░░░█░░░░░░░░█░░',
              '░░░░░░▐▌░░░░░░░░░█░']
 
+DANCE = ['░░┌──┐░░░░░░░░░░┌──┐░░'
+         '░╔╡▐▐╞╝░░┌──┐░░╔╡▐▐╞╝░'
+         '░░└╥╥┘░░╚╡▌▌╞╗░░└╥╥┘░░'
+         '░░░╚╚░░░░└╥╥┘░░░░╚╚░░░'
+         '░░░░░░░░░░╝╝░░░ DANCE PARTY']
+
 SPOOKY_RE = (r"\bgentle spooks\b", re.I)
 
 
@@ -34,8 +40,8 @@ def send(conn, chan, line):
     conn.send(out)
 
 
-def spooky_spam(conn, chan):
-    for line in MRSKELTAL:
+def ascii_spam(conn, chan, spam):
+    for line in spam:
         out = "PRIVMSG %s : %s " % (chan, line.decode('utf-8'))
         conn.send(out)
         time.sleep(.3)
@@ -115,7 +121,15 @@ def key_press(inp):
 def gentle_doot(match, conn=None, chan=None):
     spooks = 'https://youtu.be/dMXBwKOfULY'
     os.popen('DISPLAY=:0 %s -new-window %s &' % (CHROME_CMD, spooks))
-    spooky_spam(conn, chan)
+    ascii_spam(conn, chan, MRSKELTAL)
+
+
+@hook.command('circle')
+def launch_circle_dance(conn=None, chan=None):
+    dance_vid = 'https://www.youtube.com/v/nUqrafe46B8&autoplay=1&'
+                'loop=1&controls=0&showinfo=0&playlist=nUqrafe46B8'
+    os.popen('DISPLAY=:0 %s -new-window %s &' % (CHROME_CMD, dance_vid))
+    ascii_spam(conn, chan, DANCE)
 
 
 @hook.command('hstart')

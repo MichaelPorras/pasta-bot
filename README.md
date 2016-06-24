@@ -1,4 +1,4 @@
-# UguuBot
+# PASTA bawt
 
 * Easy to use wrapper
 * Intuitive configuration
@@ -23,10 +23,10 @@ The programs `daemon` or `screen` are recomended for the launcher to run optimal
 
 **Windows** users: Windows compatibility with the launcher and some plugins is **broken** (such as ping), but we do intend to add it.³
 
-### Install required Linux packages 
-    
+### Install required Linux packages
+
     Install python, python-dev, libenchant-dev, libenchant1c2a, libxslt-dev, libxml2-dev
-    
+
 Before you can run the bot, you need to install a few Python dependencies. These can be installed with `pip` (The Python package manager):
 
     [sudo] pip install -r requirements.txt
