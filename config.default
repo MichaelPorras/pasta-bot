@@ -1,51 +1,54 @@
 {
-  "acls": {}, 
+  "acls": {},
+  "bot_name": "bot name",
+  "chrome_cmd": "chromium-browser",
+  "hangout_url": "hangout url",
   "admins": [
-    "test@test" 
-  ], 
+    "test@test"
+  ],
   "api_keys": {
-    "bitly_api": "INSERT API KEY FROM bitly.com HERE", 
-    "bitly_user": "INSERT USERNAME FROM bitly.com HERE", 
-    "ebay": "", 
-    "exhentai": "username:password", 
-    "geoip": "INSERT API KEY FROM ipinfodb.com HERE", 
-    "lastfm": "", 
-    "mc_pass": "INSERT minecraft PASSWORD HERE", 
-    "mc_user": "INSERT minecraft USERNAME HERE", 
-    "rottentomatoes": "", 
-    "tvdb": "", 
-    "twitter_access_secret": "", 
-    "twitter_access_token": "", 
-    "twitter_consumer_key": "", 
-    "twitter_consumer_secret": "", 
-    "wolframalpha": "", 
+    "bitly_api": "INSERT API KEY FROM bitly.com HERE",
+    "bitly_user": "INSERT USERNAME FROM bitly.com HERE",
+    "ebay": "",
+    "exhentai": "username:password",
+    "geoip": "INSERT API KEY FROM ipinfodb.com HERE",
+    "lastfm": "",
+    "mc_pass": "INSERT minecraft PASSWORD HERE",
+    "mc_user": "INSERT minecraft USERNAME HERE",
+    "rottentomatoes": "",
+    "tvdb": "",
+    "twitter_access_secret": "",
+    "twitter_access_token": "",
+    "twitter_consumer_key": "",
+    "twitter_consumer_secret": "",
+    "wolframalpha": "",
     "yahoo": "",
     "youtube":""
-  }, 
+  },
   "censored_strings": [
-    "censored", 
+    "censored",
     "password"
-  ], 
+  ],
   "connections": {
     "Freenode": {
-      "auto_rejoin": true, 
+      "auto_rejoin": true,
       "channels": [
         "dev"
-      ], 
-      "command_prefix": "!", 
-      "invite_join": false, 
-      "nick": "dawngbot", 
-      "nickserv_password": "", 
-      "realname": "lolol", 
-      "server": "irc.freenode.net", 
+      ],
+      "command_prefix": "!",
+      "invite_join": false,
+      "nick": "dawngbot",
+      "nickserv_password": "",
+      "realname": "lolol",
+      "server": "irc.freenode.net",
       "user": "lolol"
     }
-  }, 
-  "disabled_commands": [], 
-  "disabled_plugins": [], 
+  },
+  "disabled_commands": [],
+  "disabled_plugins": [],
   "ignored": [
     "ignored nick here"
-  ], 
+  ],
   "owner": "infinity",
   "plugins": {
     "factoids": {

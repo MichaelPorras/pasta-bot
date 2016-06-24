@@ -6,8 +6,9 @@ from util import hook
 
 
 # TODO: make this autodetect either google-chrome or chromium-browser
-CHROME_CMD = 'google-chrome'
-HANGOUT_URL = 'h.clev.club'
+config_keys = json.load(open('config'))
+CHROME_CMD = config_keys.get("chrome_cmd", "chromium-browser")
+HANGOUT_URL = config_keys.get("hangout_url", "google.com")
 HOSTNAME = socket.gethostname()
 MRSKELTAL = ['▒▒▒░░░░░░░░░░▄▐░░░░',
              '▒░░░░░░▄▄▄░░▄██▄░░░',
