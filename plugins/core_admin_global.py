@@ -20,21 +20,27 @@ def gadmins(inp, notice=None, bot=None):
 @hook.command(adminonly=True)
 def gadmin(inp, notice=None, bot=None, config=None, db=None):
     "gadmin <add|del> <nick|host> -- Make <nick|host> an global admin." \
-    "(you can delete multiple admins at once)"
+        "(you can delete multiple admins at once)"
     inp = inp.lower()
     command = inp.split()[0]
     targets = inp.split()[1:]
 
     if 'add' in command:
         for target in targets:
-            target = user.get_hostmask(target,db)
+            target = user.get_hostmask(target, db)
             if target in bot.config["admins"]:
                 notice(u"%s is already a global admin." % target)
             else:
                 notice(u"%s is now a global admin." % target)
                 bot.config["admins"].append(target)
                 bot.config["admins"].sort()
-                json.dump(bot.config, open('config', 'w'), sort_keys=True, indent=2)
+                json.dump(
+                    bot.config,
+                    open(
+                        'config',
+                        'w'),
+                    sort_keys=True,
+                    indent=2)
         return
     elif 'del' in command:
         for target in targets:
@@ -43,21 +49,26 @@ def gadmin(inp, notice=None, bot=None, config=None, db=None):
                 notice(u"%s is no longer a global admin." % target)
                 bot.config["admins"].remove(target)
                 bot.config["admins"].sort()
-                json.dump(bot.config, open('config', 'w'), sort_keys=True, indent=2)
+                json.dump(
+                    bot.config,
+                    open(
+                        'config',
+                        'w'),
+                    sort_keys=True,
+                    indent=2)
             else:
                 notice(u"%s is not a global admin." % target)
         return
 
 
-
-#################################
-### GDisable/GEnable Commands ###
+# GDisable/GEnable Commands
 
 @hook.command(permissions=["op_lock", "op"], adminonly=True, autohelp=False)
 def gdisabled(inp, notice=None, bot=None, chan=None, db=None):
     """gignored -- Lists globally disabled commands."""
     if bot.config["disabled_commands"]:
-        notice(u"Globally disabled commands are: %s." % ", ".join(bot.config["disabled_commands"]))
+        notice(u"Globally disabled commands are: %s." %
+               ", ".join(bot.config["disabled_commands"]))
     else:
         notice(u"There are no globally disabled commands.")
     return
@@ -69,14 +80,21 @@ def gdisable(inp, notice=None, bot=None, chan=None, db=None):
     disabledcommands = bot.config["disabled_commands"]
     targets = inp.split()
     for target in targets:
-        if "gdisable" in target or "genable" in target or "core_admin" in target:
+        if "gdisable" in target or "genable" in target or "core_admin" \
+           in target:
             notice(u"[Global]: {} cannot be disabled.".format(target))
         elif disabledcommands and target in disabledcommands:
             notice(u"[Global]: {} is already disabled.".format(target))
         else:
             bot.config["disabled_commands"].append(target)
             bot.config["disabled_commands"].sort()
-            json.dump(bot.config, open('config', 'w'), sort_keys=True, indent=2)
+            json.dump(
+                bot.config,
+                open(
+                    'config',
+                    'w'),
+                sort_keys=True,
+                indent=2)
             notice(u"[Global]: {} has been disabled.".format(target))
     return
 
@@ -90,7 +108,13 @@ def genable(inp, notice=None, bot=None, chan=None, db=None):
         if disabledcommands and target in disabledcommands:
             bot.config["disabled_commands"].remove(target)
             bot.config["disabled_commands"].sort()
-            json.dump(bot.config, open('config', 'w'), sort_keys=True, indent=2)
+            json.dump(
+                bot.config,
+                open(
+                    'config',
+                    'w'),
+                sort_keys=True,
+                indent=2)
             notice(u"[Global]: {} has been enabled.".format(target))
         else:
             notice(u"[Global]: {} is not disabled.".format(target))
@@ -99,8 +123,7 @@ def genable(inp, notice=None, bot=None, chan=None, db=None):
 # if 'all' in targets or '*' in targets:
 
 
-################################
-### Ignore/Unignore Commands ###
+# Ignore/Unignore Commands
 
 @hook.command(permissions=["op_lock", "op"], adminonly=True, autohelp=False)
 def gignored(inp, notice=None, bot=None, chan=None, db=None):
@@ -118,16 +141,23 @@ def gignore(inp, notice=None, bot=None, chan=None, db=None):
     ignorelist = bot.config["ignored"]
     targets = inp.split()
     for target in targets:
-        target = user.get_hostmask(target,db)
-        if (user.is_globaladmin(target,db,bot)):
-            notice(u"[Global]: {} is an admin and cannot be ignored.".format(inp))
+        target = user.get_hostmask(target, db)
+        if (user.is_globaladmin(target, db, bot)):
+            notice(
+                u"[Global]: {} is an admin and cannot be ignored.".format(inp))
         else:
             if ignorelist and target in ignorelist:
                 notice(u"[Global]: {} is already ignored.".format(target))
             else:
                 bot.config["ignored"].append(target)
                 bot.config["ignored"].sort()
-                json.dump(bot.config, open('config', 'w'), sort_keys=True, indent=2)
+                json.dump(
+                    bot.config,
+                    open(
+                        'config',
+                        'w'),
+                    sort_keys=True,
+                    indent=2)
                 notice(u"[Global]: {} has been ignored.".format(target))
     return
     #         if ignorelist and target in ignorelist:
@@ -142,23 +172,36 @@ def gignore(inp, notice=None, bot=None, chan=None, db=None):
 
 @hook.command(permissions=["op_lock", "op"], adminonly=True, autohelp=False)
 def gunignore(inp, notice=None, bot=None, chan=None, db=None):
-    """unignore [channel] <nick|host> -- Makes the bot listen to <nick|host>."""
+    """
+    unignore [channel] <nick|host>
+    Makes the bot listen to <nick|host>.
+    """
     ignorelist = bot.config["ignored"]
     targets = inp.split()
     for target in targets:
-        target = user.get_hostmask(target,db)
+        target = user.get_hostmask(target, db)
         if ignorelist and target in ignorelist:
             bot.config["ignored"].remove(target)
             bot.config["ignored"].sort()
-            json.dump(bot.config, open('config', 'w'), sort_keys=True, indent=2)
+            json.dump(
+                bot.config,
+                open(
+                    'config',
+                    'w'),
+                sort_keys=True,
+                indent=2)
             notice(u"[Global]: {} has been unignored.".format(target))
         else:
             notice(u"[Global]: {} is not ignored.".format(target))
     return
 
 
-@hook.command("quit", autohelp=False, permissions=["botcontrol"], adminonly=True)
-@hook.command(autohelp=False, permissions=["botcontrol"],adminonly=True)
+@hook.command(
+    "quit",
+    autohelp=False,
+    permissions=["botcontrol"],
+    adminonly=True)
+@hook.command(autohelp=False, permissions=["botcontrol"], adminonly=True)
 def stop_bot(inp, nick=None, conn=None):
     """stop [reason] -- Kills the bot with [reason] as its quit message."""
     if inp:
@@ -171,14 +214,20 @@ def stop_bot(inp, nick=None, conn=None):
 
 @hook.command(autohelp=False, permissions=["botcontrol"], adminonly=True)
 def restart(inp, nick=None, conn=None, bot=None):
-    """restart [reason] -- Restarts the bot with [reason] as its quit message."""
+    """
+    restart [reason]
+    Restarts the bot with [reason] as its quit message.
+    """
     for botcon in bot.conns:
         if inp:
-            bot.conns[botcon].cmd("QUIT", ["Restarted by {} ({})".format(nick, inp)])
+            bot.conns[botcon].cmd(
+                "QUIT", [
+                    "Restarted by {} ({})".format(
+                        nick, inp)])
         else:
             bot.conns[botcon].cmd("QUIT", ["Restarted by {}.".format(nick)])
     time.sleep(5)
-    #os.execl("./bot", "bot", "restart")
+    # os.execl("./bot", "bot", "restart")
     args = sys.argv[:]
     args.insert(0, sys.executable)
     os.execv(sys.executable, args)
@@ -193,7 +242,8 @@ def clearlogs(inp, input=None):
 @hook.command(autohelp=False, permissions=["botcontrol"], adminonly=True)
 def join(inp, conn=None, notice=None, bot=None):
     """join <channel> -- Joins <channel>."""
-    if "0,0" in inp: return
+    if "0,0" in inp:
+        return
     for target in inp.split(" "):
         if not target.startswith("#"):
             target = "#{}".format(target)
@@ -203,7 +253,13 @@ def join(inp, conn=None, notice=None, bot=None):
         channellist = bot.config["connections"][conn.name]["channels"]
         if not target.lower() in channellist:
             channellist.append(target.lower())
-            json.dump(bot.config, open('config', 'w'), sort_keys=True, indent=2)
+            json.dump(
+                bot.config,
+                open(
+                    'config',
+                    'w'),
+                sort_keys=True,
+                indent=2)
     return
 
 
@@ -212,21 +268,23 @@ def part(inp, conn=None, chan=None, notice=None, bot=None):
     """part <channel> -- Leaves <channel>.
     If [channel] is blank the bot will leave the
     channel the command was used in."""
-    if inp: targets = inp
-    else: targets = chan
+    if inp:
+        targets = inp
+    else:
+        targets = chan
 
     channellist = bot.config["connections"][conn.name]["channels"]
 
     for target in targets.split(" "):
         if not target.startswith("#"):
             target = "#{}".format(target)
-	if target in conn.channels:
-	    notice(u"Attempting to leave {}...".format(target))
-	    conn.part(target)
-	    channellist.remove(target.lower().strip())
-	    print 'Deleted {} from channel list.'.format(target)
-	else:
-	    notice(u"Not in {}!".format(target))
+        if target in conn.channels:
+            notice(u"Attempting to leave {}...".format(target))
+            conn.part(target)
+            channellist.remove(target.lower().strip())
+            print 'Deleted {} from channel list.'.format(target)
+        else:
+            notice(u"Not in {}!".format(target))
 
     json.dump(bot.config, open('config', 'w'), sort_keys=True, indent=2)
     return
@@ -284,7 +342,7 @@ def say(inp, conn=None, chan=None):
 def msg(inp, conn=None, chan=None, notice=None):
     "msg <user> <message> -- Sends a Message."
     user = inp.split()[0]
-    message = inp.replace(user,'').strip()
+    message = inp.replace(user, '').strip()
     out = u"PRIVMSG %s :%s" % (user, message)
     conn.send(out)
 
@@ -313,9 +371,13 @@ def me(inp, conn=None, chan=None):
 
 @hook.command(adminonly=True)
 def set(inp, conn=None, chan=None, db=None, notice=None):
-    "set <field> <nick> <value> -- Admin override for setting database values. " \
-    "Example: set location infinity 80210 - " \
-    "set lastfm infinity spookieboogie"
+    '''
+    set <field> <nick> <value>
+    Admin override for setting database values.
+    Examples:
+        - set location infinity 80210
+        - set lastfm infinity spookieboogie
+    '''
 
     inpsplit = inp.split(" ")
 
@@ -324,16 +386,17 @@ def set(inp, conn=None, chan=None, db=None, notice=None):
         value = inp.split(" ")[1].strip()
 
         if 'voteban' in field or \
-            'votekick' in field:
-            database.set(db,'channels',field, value,'chan',chan)
+                'votekick' in field:
+            database.set(db, 'channels', field, value, 'chan', chan)
             notice(u"Set {} to {}.".format(field, value))
             return
     elif len(inpsplit) >= 3:
         field = inp.split(" ")[0].strip()
         nick = inp.split(" ")[1].strip()
-        value = inp.replace(field,'').replace(nick,'').strip()
+        value = inp.replace(field, '').replace(nick, '').strip()
         if field and nick and value:
-            if 'del' in value or 'none' in value: value = ''
+            if 'del' in value or 'none' in value:
+                value = ''
             if 'location' in field or \
                 'fines' in field or\
                 'lastfm' in field or  \
@@ -352,10 +415,12 @@ def set(inp, conn=None, chan=None, db=None, notice=None):
                 'steam' in field or\
                 'greeting' in field or\
                 'socialmedias' in field or\
-                'snapchat' in field:
-                #if type(value) is list: value = value[0]
-                if value.lower() is 'none': database.set(db,'users',field, '','nick',nick)
-                else: database.set(db,'users',field, value,'nick',nick)
+                    'snapchat' in field:
+                # if type(value) is list: value = value[0]
+                if value.lower() is 'none':
+                    database.set(db, 'users', field, '', 'nick', nick)
+                else:
+                    database.set(db, 'users', field, value, 'nick', nick)
                 notice(u"Set {} for {} to {}.".format(field, nick, value))
                 return
 
@@ -364,17 +429,20 @@ def set(inp, conn=None, chan=None, db=None, notice=None):
 
 
 @hook.command(adminonly=True, autohelp=False)
-def db(inp,db=None):
+def db(inp, db=None):
     split = inp.split(' ')
     action = split[0]
     if "init" in action:
-        result = db.execute("create table if not exists users(nick primary key, host, location, greeting, lastfm, fines, battlestation, desktop, horoscope, version)")
+        result = db.execute(
+            "create table if not exists users(nick primary key, host, "
+            "location, greeting, lastfm, fines, battlestation, desktop, "
+            "horoscope, version)")
         db.commit()
         return result
     elif "addcol" in action:
         table = split[1]
         col = split[2]
         if table is not None and col is not None:
-            db.execute("ALTER TABLE {} ADD COLUMN {}".format(table,col))
+            db.execute("ALTER TABLE {} ADD COLUMN {}".format(table, col))
             db.commit
             return "Added Column"

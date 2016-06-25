@@ -1,21 +1,20 @@
 #!/usr/bin/env python
-
-__author__ = "InfinityLabs"
-__authors__ = ["Infinity"]
-__copyright__ = "Copyright 2013, InfinityLabs"
-__copyright__ = "Copyright 2012, ClouDev"
-__credits__ = ["infinity","thenoodle", "_frozen", "rmmh"]
-__license__ = "GPL v3"
-__version__ = "DEV"
-__maintainer__ = "InfinityLabs"
-__email__ = "root@infinitylabs.us"
-__status__ = "Development"
-
 import os
 import Queue
 import sys
 import time
 import platform
+
+__author__ = "Anonymike"
+__authors__ = ["Anonymike", "evanscottgray"]
+__copyright__ = "Copyright 2016, Anonymike"
+__credits__ = ["anonymike", "louis_tully"]
+__license__ = "GPL v3"
+__version__ = "DEV"
+__maintainer__ = "Anonymike"
+__email__ = "admin@trump.hosting"
+__status__ = "Development"
+
 
 sys.path += ['plugins']  # so 'import hook' works without duplication
 sys.path += ['lib']
@@ -25,7 +24,8 @@ os.chdir(sys.path[0] or '.')  # do stuff relative to the install directory
 class Bot(object):
     pass
 
-print 'UguuBot %s (%s) <http://github.com/infinitylabs/UguuBot>' % (__version__, __status__)
+print 'PastaBot %s (%s) <http://github.com/Anonymike/pasta-bot>' % \
+      (__version__, __status__)
 
 # print debug info
 opsys = platform.platform()
@@ -34,8 +34,8 @@ python_ver = platform.python_version()
 architecture = ' '.join(platform.architecture())
 
 print "Operating System: %s, Python " \
-        "Version: %s %s, Architecture: %s" \
-        "" % (opsys, python_imp, python_ver, architecture)
+    "Version: %s %s, Architecture: %s" \
+    "" % (opsys, python_imp, python_ver, architecture)
 
 bot = Bot()
 bot.start_time = time.time()
@@ -44,7 +44,7 @@ print 'Loading plugins...'
 
 # bootstrap the reloader
 eval(compile(open(os.path.join('core', 'reload.py'), 'U').read(),
-    os.path.join('core', 'reload.py'), 'exec'))
+             os.path.join('core', 'reload.py'), 'exec'))
 reload(init=True)
 
 config()
@@ -59,12 +59,21 @@ try:
     for name, conf in bot.config['connections'].iteritems():
         print 'Connecting to server: %s' % conf['server']
         if conf.get('ssl'):
-            bot.conns[name] = SSLIRC(name, conf['server'], conf['nick'], conf=conf,
-                    port=conf.get('port', 6667), channels=conf['channels'],
-                    ignore_certificate_errors=conf.get('ignore_cert', True))
+            bot.conns[name] = SSLIRC(
+                name, conf['server'], conf['nick'], conf=conf, port=conf.get(
+                    'port', 6667),
+                channels=conf['channels'], ignore_certificate_errors=conf.get(
+                    'ignore_cert', True))
         else:
-            bot.conns[name] = IRC(name, conf['server'], conf['nick'], conf=conf,
-                    port=conf.get('port', 6667), channels=conf['channels'])
+            bot.conns[name] = IRC(
+                name,
+                conf['server'],
+                conf['nick'],
+                conf=conf,
+                port=conf.get(
+                    'port',
+                    6667),
+                channels=conf['channels'])
 except Exception as e:
     print 'ERROR: malformed config file', e
     sys.exit()

@@ -26,11 +26,13 @@ def system(inp):
     cpu = platform.machine()
     with open('/proc/uptime', 'r') as f:
         uptime_seconds = float(f.readline().split()[0])
-        uptime = str(timedelta(seconds = uptime_seconds))
+        uptime = str(timedelta(seconds=uptime_seconds))
 
     return "Hostname: \x02{}\x02, Operating System: \x02{}\x02, Python " \
            "Version: \x02{} {}\x02, Architecture: \x02{}\x02, CPU: \x02{}" \
-           "\x02, Uptime: \x02{}\x02".format(hostname, os, python_imp, python_ver, architecture, cpu, uptime)
+           "\x02, Uptime: \x02{}\x02".format(hostname, os, python_imp,
+                                             python_ver, architecture, cpu,
+                                             uptime)
 
 
 @hook.command(autohelp=False, adminonly=True)
@@ -45,10 +47,11 @@ def memory(inp):
         data = [float(i.replace(' kB', '')) for i in data]
         strings = [convert_kilobytes(i) for i in data]
         # prepare the output
-        out = "Threads: \x02{}\x02, Real Memory: \x02{}\x02, Allocated Memory: \x02{}\x02, Peak " \
+        out = "Threads: \x02{}\x02, Real Memory: \x02{}\x02, " \
+              "Allocated Memory: \x02{}\x02, Peak " \
               "Allocated Memory: \x02{}\x02, Stack Size: \x02{}\x02, Heap " \
-              "Size: \x02{}\x02".format(s['Threads'], strings[0], strings[1], strings[2],
-              strings[3], strings[4])
+              "Size: \x02{}\x02".format(s['Threads'], strings[0], strings[1],
+                                        strings[2], strings[3], strings[4])
         # return output
         return out
 
@@ -72,9 +75,10 @@ def uptime(inp, bot=None):
     uptime = timedelta(seconds=uptime_raw)
     with open('/proc/uptime', 'r') as f:
         sysuptime_seconds = float(f.readline().split()[0])
-        sysuptime = str(timedelta(seconds = sysuptime_seconds))
+        sysuptime = str(timedelta(seconds=sysuptime_seconds))
 
-    return "Uptime: \x02{}\x02, System Uptime: \x02{}\x02".format(uptime, sysuptime)
+    return "Uptime: \x02{}\x02, System Uptime: \x02{}\x02".format(uptime,
+                                                                  sysuptime)
 
 
 @hook.command(autohelp=False, adminonly=True)
@@ -85,10 +89,9 @@ def pid(inp):
 
 @hook.command(autohelp=False)
 def bots(inp):
-    return "Reporting in! [Python] See http://uguubot.com"
+    return "Reporting in! [Python] See https://github.com/Anonymike/pasta-bot"
 
 
 @hook.command(autohelp=False)
 def source(inp):
-    return "\x02uguubot\x02 - http://github.com/infinitylabs/uguubot"
-    
+    return "\x02pastabot\x02 - https://github.com/Anonymike/pasta-bot"
