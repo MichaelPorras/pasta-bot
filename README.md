@@ -15,7 +15,7 @@
 
 Linux packages needed for install: python, python-dev, libenchant-dev, libenchant1c2a, libxslt-dev, libxml2-dev.
 
-UguuBot runs on **Python** *2.7.x*. It is developed on **Ubuntu** *12.04* with **Python** *2.7.3*.
+PastaBot runs on **Python** *2.7.x*. It is developed on **Ubuntu** *12.04* with **Python** *2.7.3*.
 
 It **requires the Python module** `lXML`, and `Enchant` is needed for the spellcheck plugin.
 
@@ -57,13 +57,13 @@ For the launcher to work properly, install `screen`, or `daemon` (daemon is reco
 
 Once you have installed either `screen` or `daemon`, run the start command:
 
-`./uguubot start`
+`./pasta-bot start`
 
 It will generate a default config for you.  Once you have edited the config, run it again with the same command:
 
-`./uguubot start`
+`./pasta-bot start`
 
-This will start up your bot as a background process. To stop it, use `./uguubot stop`.)
+This will start up your bot as a background process. To stop it, use `./pasta-bot stop`.)
 
 #### Manually
 
@@ -74,31 +74,6 @@ To manually run the bot and get console output, run it with:
 On Windows you can usually just double-click the `bot.py` file to start the bot, as long as you have Python installed correctly.
 
 (note: running the bot without the launcher breaks the start and restart commands)
-
-## License
-
-UguuBot is **licensed** under the **GPL v3** license. The terms are as follows.
-
-    UguuBot/DEV
-    Copyright © 2013-2013 Infinity - <https://github.com/infinitylabs/UguuBot>
-    Copyright © 2011-2012 Luke Rogers / ClouDev - <[cloudev.github.com](http://cloudev.github.com)>
-
-    UguuBot is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    UguuBot is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with UguuBot.  If not, see <http://www.gnu.org/licenses/>.
-
-## Contact
-
-Need to contact someone? Head on over to #uguubot at irc.rizon.net for assistance or any other needs.
 
 ## Notes
 

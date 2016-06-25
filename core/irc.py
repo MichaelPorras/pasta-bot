@@ -16,15 +16,6 @@ def decode(txt):
     return txt.decode('utf-8', 'ignore')
 
 
-def censor(text):
-    replacement = '[censored]'
-    if 'censored_strings' in bot.config:
-        words = map(re.escape, bot.config['censored_strings'])
-        regex = re.compile('(%s)' % "|".join(words))
-        text = regex.sub(replacement, text)
-    return text
-
-
 class crlf_tcp(object):
     "Handles tcp connections that consist of utf-8 lines ending with crlf"
 
@@ -100,8 +91,8 @@ class crlf_ssl_tcp(crlf_tcp):
 
     def create_socket(self):
         return wrap_socket(crlf_tcp.create_socket(self), server_side=False,
-                cert_reqs=CERT_NONE if self.ignore_cert_errors else
-                CERT_REQUIRED)
+                           cert_reqs=CERT_NONE if self.ignore_cert_errors else
+                           CERT_REQUIRED)
 
     def recv_from_socket(self, nbytes):
         return self.socket.read(nbytes)
@@ -111,7 +102,7 @@ class crlf_ssl_tcp(crlf_tcp):
 
     def handle_receive_exception(self, error, last_timestamp):
         # this is terrible
-        if not "timed out" in error.args[0]:
+        if "timed out" not in error.args[0]:
             raise
         return crlf_tcp.handle_receive_exception(self, error, last_timestamp)
 
@@ -147,8 +138,9 @@ class IRC(object):
         self.set_pass(self.conf.get('server_password'))
         self.set_nick(self.nick)
         self.cmd("USER",
-            [conf.get('user', 'uguubot'), "3", "*", conf.get('realname',
-                'UguuBot - http://github.com/infinitylabs/UguuBot')])
+                 [self.conf.get('user', 'pasta-bot'), "3", "*",
+                  self.conf.get('realname',
+                  'PastaBot - http://github.com/Anonymike/pasta-bot')])
 
     def parse_loop(self):
         while True:
@@ -174,7 +166,7 @@ class IRC(object):
                 lastparam = paramlist[-1]
             # put the parsed message in the response queue
             self.out.put([msg, prefix, command, params, nick, user, host,
-                    mask, paramlist, lastparam])
+                          mask, paramlist, lastparam])
             # if the server pings us, pong them back
             if command == "PING":
                 self.cmd("PONG", paramlist)
@@ -210,6 +202,14 @@ class IRC(object):
     def cmd(self, command, params=None):
         if params:
             params[-1] = ':' + params[-1]
+
+            def censor(text):
+                replacement = '[censored]'
+                if 'censored_strings' in self.conf:
+                    words = map(re.escape, self.conf.get('censored_strings'))
+                    regex = re.compile('(%s)' % "|".join(words))
+                    text = regex.sub(replacement, text)
+                return text
             self.send(command + ' ' + ' '.join(map(censor, params)))
         else:
             self.send(command)

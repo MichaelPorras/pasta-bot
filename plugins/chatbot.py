@@ -3,21 +3,24 @@ import urllib
 import urllib2
 import uuid
 import xml.dom.minidom
+from util import hook
+import re
+import json
 
 """
     chatterbotapi
     Copyright (C) 2011 pierredavidbelanger@gmail.com
-    
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
@@ -26,29 +29,33 @@ import xml.dom.minidom
 # API
 #################################################
 
+
 class ChatterBotType:
 
     CLEVERBOT = 1
     JABBERWACKY = 2
     PANDORABOTS = 3
 
+
 class ChatterBotFactory:
 
-    def create(self, type, arg = None):
+    def create(self, type, arg=None):
         if type == ChatterBotType.CLEVERBOT:
             return _Cleverbot('http://www.cleverbot.com/webservicemin', 35)
         elif type == ChatterBotType.JABBERWACKY:
             return _Cleverbot('http://jabberwacky.com/webservicemin', 29)
         elif type == ChatterBotType.PANDORABOTS:
-            if arg == None:
+            if arg is None:
                 raise Exception('PANDORABOTS needs a botid arg')
             return _Pandorabots(arg)
         return None
+
 
 class ChatterBot:
 
     def create_session(self):
         return None
+
 
 class ChatterBotSession:
 
@@ -60,6 +67,7 @@ class ChatterBotSession:
         thought.text = text
         return self.think_thought(thought).text
 
+
 class ChatterBotThought:
 
     pass
@@ -67,6 +75,7 @@ class ChatterBotThought:
 #################################################
 # Cleverbot impl
 #################################################
+
 
 class _Cleverbot(ChatterBot):
 
@@ -76,6 +85,7 @@ class _Cleverbot(ChatterBot):
 
     def create_session(self):
         return _CleverbotSession(self)
+
 
 class _CleverbotSession(ChatterBotSession):
 
@@ -98,7 +108,7 @@ class _CleverbotSession(ChatterBotSession):
         url_response = urllib2.urlopen(self.bot.url, data)
         response = url_response.read()
         response_values = response.split('\r')
-        #self.vars['??'] = _utils_string_at_index(response_values, 0)
+        # self.vars['??'] = _utils_string_at_index(response_values, 0)
         self.vars['sessionid'] = _utils_string_at_index(response_values, 1)
         self.vars['logurl'] = _utils_string_at_index(response_values, 2)
         self.vars['vText8'] = _utils_string_at_index(response_values, 3)
@@ -109,8 +119,9 @@ class _CleverbotSession(ChatterBotSession):
         self.vars['vText3'] = _utils_string_at_index(response_values, 8)
         self.vars['vText2'] = _utils_string_at_index(response_values, 9)
         self.vars['prevref'] = _utils_string_at_index(response_values, 10)
-        #self.vars['??'] = _utils_string_at_index(response_values, 11)
-        self.vars['emotionalhistory'] = _utils_string_at_index(response_values, 12)
+        # self.vars['??'] = _utils_string_at_index(response_values, 11)
+        self.vars['emotionalhistory'] = _utils_string_at_index(
+            response_values, 12)
         self.vars['ttsLocMP3'] = _utils_string_at_index(response_values, 13)
         self.vars['ttsLocTXT'] = _utils_string_at_index(response_values, 14)
         self.vars['ttsLocTXT3'] = _utils_string_at_index(response_values, 15)
@@ -119,7 +130,8 @@ class _CleverbotSession(ChatterBotSession):
         self.vars['lineURL'] = _utils_string_at_index(response_values, 18)
         self.vars['linePOST'] = _utils_string_at_index(response_values, 19)
         self.vars['lineChoices'] = _utils_string_at_index(response_values, 20)
-        self.vars['lineChoicesAbbrev'] = _utils_string_at_index(response_values, 21)
+        self.vars['lineChoicesAbbrev'] = _utils_string_at_index(
+            response_values, 21)
         self.vars['typingData'] = _utils_string_at_index(response_values, 22)
         self.vars['divert'] = _utils_string_at_index(response_values, 23)
         response_thought = ChatterBotThought()
@@ -130,6 +142,7 @@ class _CleverbotSession(ChatterBotSession):
 # Pandorabots impl
 #################################################
 
+
 class _Pandorabots(ChatterBot):
 
     def __init__(self, botid):
@@ -137,6 +150,7 @@ class _Pandorabots(ChatterBot):
 
     def create_session(self):
         return _PandorabotsSession(self)
+
 
 class _PandorabotsSession(ChatterBotSession):
 
@@ -149,11 +163,13 @@ class _PandorabotsSession(ChatterBotSession):
         try:
             self.vars['input'] = thought.text
             data = urllib.urlencode(self.vars)
-            url_response = urllib2.urlopen('http://www.pandorabots.com/pandora/talk-xml', data)
+            url_response = urllib2.urlopen(
+                'http://www.pandorabots.com/pandora/talk-xml', data)
             response = url_response.read()
             response_dom = xml.dom.minidom.parseString(response)
             response_thought = ChatterBotThought()
-            response_thought.text = response_dom.getElementsByTagName('that')[0].childNodes[0].data.strip()
+            r = response_dom.getElementsByTagName('that')[0]
+            response_thought.text = r.childNodes[0].data.strip()
             return response_thought
         except:
             global botsession
@@ -172,28 +188,53 @@ def _utils_string_at_index(strings, index):
         return ''
 
 
-
-from util import hook
-import re
-import json
 factory = ChatterBotFactory()
 
 # bot1 = factory.create(ChatterBotType.CLEVERBOT)
 # bot1session = bot1.create_session()
-#b0dafd24ee35a477
-#f3b17b62de377847
+# b0dafd24ee35a477
+# f3b17b62de377847
 
 config_keys = json.load(open('config'))
-bot_name = config_keys.get("bot_name","uguubot")
+bot_name = config_keys.get("bot_name", "pasta-bot")
 short_bot_name = re.sub('bot', '', bot_name).strip()
 
 bot = factory.create(ChatterBotType.PANDORABOTS, 'df9c8acfde345d97')
 botsession = bot.create_session()
 
-chatbot_re = (r'((?:%s|%s)\s(.+)|(.+)\s(?:%s|%s))'%(short_bot_name,bot_name,short_bot_name,bot_name), re.I)
+chatbot_re = (r'((?:%s|%s)\s(.+)|(.+)\s(?:%s|%s))' %
+              (short_bot_name, bot_name, short_bot_name, bot_name), re.I)
+
+
 @hook.regex(*chatbot_re)
 @hook.command
 def chatbot(inp, reply=None, bot=None):
-    thought = inp.group(1).replace(bot_name,'').replace(short_bot_name,'').replace('ALICE','Dawng').strip()
+    thought = inp.group(1).replace(
+        bot_name,
+        '').replace(
+        short_bot_name,
+        '').replace(
+            'ALICE',
+        'Dawng').strip()
     response = botsession.think(thought)
-    reply(response.replace('Bartender Katie','Dawng').replace('ALICE','DAWNG~~~').replace('Daisy Picnic','infinity').replace('ELVIS','infinity').replace('<br> ','').replace('German Alice','urmom').replace('Dancing Alice','infinity').replace('Www.AliceBot.Org','uguubot.com').replace('alicebot','uguubot').replace('Hello there. would you like a drink? Click on me for a selection :).', 'ohai.')  )
+    s = 'Hello there. would you like a drink? Click on me for a selection :).'
+    reply(
+        response.replace(
+            'Bartender Katie',
+            'Dawng').replace(
+            'ALICE',
+            'DAWNG~~~').replace(
+                'Daisy Picnic',
+                'infinity').replace(
+                    'ELVIS',
+                    'infinity').replace(
+                        '<br> ',
+                        '').replace(
+                            'German Alice',
+                            'urmom').replace(
+                                'Dancing Alice',
+                                'infinity').replace(
+                                    'Www.AliceBot.Org',
+                                    'pastabot.com').replace(
+                                        'alicebot',
+                                        'pasta-bot').replace(s, 'ohai.'))
