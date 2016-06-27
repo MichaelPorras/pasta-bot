@@ -140,7 +140,7 @@ def spooky(inp, conn=None, chan=None):
     _playsound(file_name)
 
 
-@hook.command
+@hook.command('pressure')
 @muteable
 def pressure(inp, conn=None, chan=None):
     file_name = 'pressure.wav'
@@ -158,5 +158,16 @@ def pressure(inp, conn=None, chan=None):
 def cando(inp, conn=None, chan=None):
     file_name = 'can_doo.wav'
     msg = 'Caaaaaan Dooooooo!'
+    _send_message(msg, conn, chan)
+    _playsound(file_name)
+
+
+@hook.command('trump')
+@hook.command('getout')
+@hook.command('outoutout')
+@muteable
+def out_out_out(inp, conn=None, chan=None):
+    file_name = 'OUT_OUT_OUT.wav'
+    msg = 'OUT! OUT! OUT!'
     _send_message(msg, conn, chan)
     _playsound(file_name)
