@@ -28,14 +28,14 @@ def _send_message(msg, conn, chan):
     conn.send(out)
 
 
-@hook.command
+@hook.command('mutesounds')
 def mute(inp):
     global MUTE
     MUTE = True
     return 'Goofy Sounds Muted'
 
 
-@hook.command
+@hook.command('unmutesounds')
 def unmute(inp):
     global MUTE
     MUTE = False
