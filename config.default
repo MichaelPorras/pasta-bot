@@ -2,6 +2,8 @@
   "acls": {},
   "bot_name": "bot name",
   "chrome_cmd": "chromium-browser",
+  "ivonna_access_key": "",
+  "ivonna_secret_key": "",
   "hangout_url": "hangout url",
   "admins": [
     "test@test"
